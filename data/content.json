@@ -1,0 +1,656 @@
+{
+  "settings": {
+    "appName": "airbnb",
+    "personaName": "Gæst",
+    "searchPlaceholder": "Start din søgning",
+    "currency": "kr.",
+    "serviceFeePct": 14,
+    "featuredListingId": "sk-1",
+    "showAccent": true,
+    "researchQuestion": "Hvordan gør Airbnbs digitale platform rejsedestinationer til noget, man hurtigt kan vælge og forbruge, og hvordan kan associativt design og bevidst friktion bruges til at gentænke bookingoplevelsen, så brugeren bliver mere opmærksom på det lokalsamfund og nabolag, de besøger?",
+    "testTask": "Forestil dig, at du skal på en forlænget weekend ved havet med en anden voksen i november. Brug appen til at finde og booke et sted. Sig eller skriv, hvad du tænker undervejs – der er ingen forkerte svar.",
+    "finalQuestion": "Hvad ved du nu om stedet, du skal besøge – udover selve boligen? Var der noget, der fik dig til at stoppe op?"
+  },
+  "categories": [
+    {
+      "_id": "cat-beach",
+      "name": "Strand",
+      "icon": "🏖️"
+    },
+    {
+      "_id": "cat-cabins",
+      "name": "Hytter",
+      "icon": "🛖"
+    },
+    {
+      "_id": "cat-city",
+      "name": "Ikoniske byer",
+      "icon": "🏙️"
+    },
+    {
+      "_id": "cat-view",
+      "name": "Fantastisk udsigt",
+      "icon": "🌅"
+    },
+    {
+      "_id": "cat-country",
+      "name": "Landet",
+      "icon": "🌾"
+    },
+    {
+      "_id": "cat-pool",
+      "name": "Pools",
+      "icon": "🏊"
+    },
+    {
+      "_id": "cat-lake",
+      "name": "Ved søen",
+      "icon": "🛶"
+    }
+  ],
+  "destinations": [
+    {
+      "_id": "dest-skagen",
+      "name": "Skagen",
+      "subtitle": "Strande og lys i Nordjylland",
+      "icon": "🏖️"
+    },
+    {
+      "_id": "dest-cph",
+      "name": "København",
+      "subtitle": "Populær blandt rejsende i nærheden",
+      "icon": "🏙️"
+    },
+    {
+      "_id": "dest-bornholm",
+      "name": "Bornholm",
+      "subtitle": "Klipper, røgerier og natur",
+      "icon": "⛰️"
+    },
+    {
+      "_id": "dest-aarhus",
+      "name": "Aarhus",
+      "subtitle": "Kultur og arkitektur",
+      "icon": "🏛️"
+    },
+    {
+      "_id": "dest-lisbon",
+      "name": "Lissabon",
+      "subtitle": "Fordi du gemte boliger i Portugal",
+      "icon": "🌇"
+    }
+  ],
+  "listings": [
+    {
+      "_id": "sk-1",
+      "title": "Stråtækt sommerhus tæt på stranden",
+      "location": "Skagen, Danmark",
+      "destination": "Skagen",
+      "category": "cat-beach",
+      "type": "Hele bolig",
+      "guests": 4,
+      "bedrooms": 2,
+      "beds": 3,
+      "baths": 1,
+      "pricePerNight": 1450,
+      "cleaningFee": 400,
+      "rating": 4.96,
+      "reviewCount": 128,
+      "hostName": "Mette",
+      "hostYears": 6,
+      "superhost": true,
+      "guestFavourite": true,
+      "description": "Klassisk gult sommerhus med stråtag, 300 meter fra Vesterhavet. Stor terrasse med morgensol, brændeovn til de kølige aftener og cykler, som du frit kan låne til turen ind til byen.",
+      "amenities": [
+        "Wi-fi",
+        "Køkken",
+        "Gratis parkering",
+        "Brændeovn",
+        "Vaskemaskine",
+        "Terrasse",
+        "Cykler",
+        "Grill"
+      ],
+      "photoLabels": [
+        "Facade med stråtag",
+        "Stue med brændeovn",
+        "Soveværelse",
+        "Terrasse",
+        "Stien til stranden"
+      ],
+      "mapX": 46,
+      "mapY": 38,
+      "reviews": [
+        {
+          "author": "Jonas",
+          "date": "september 2026",
+          "text": "Perfekt beliggenhed og et utroligt hyggeligt hus. Mette var hurtig til at svare."
+        },
+        {
+          "author": "Sofie",
+          "date": "august 2026",
+          "text": "Præcis som på billederne. Cyklerne var et kæmpe plus!"
+        },
+        {
+          "author": "Lukas",
+          "date": "juli 2026",
+          "text": "Vi kommer helt sikkert igen næste sommer."
+        }
+      ]
+    },
+    {
+      "_id": "sk-2",
+      "title": "Lys lejlighed ved havnen",
+      "location": "Skagen, Danmark",
+      "destination": "Skagen",
+      "category": "cat-view",
+      "type": "Hele lejlighed",
+      "guests": 2,
+      "bedrooms": 1,
+      "beds": 1,
+      "baths": 1,
+      "pricePerNight": 980,
+      "cleaningFee": 250,
+      "rating": 4.88,
+      "reviewCount": 64,
+      "hostName": "Anders",
+      "hostYears": 3,
+      "superhost": false,
+      "guestFavourite": false,
+      "description": "Moderne lejlighed med altan og udsigt over fiskerihavnen. Gåafstand til restauranter og Skagens Museum.",
+      "amenities": [
+        "Wi-fi",
+        "Køkken",
+        "Altan",
+        "Opvaskemaskine",
+        "Elevator"
+      ],
+      "photoLabels": [
+        "Altan med havneudsigt",
+        "Køkken-alrum",
+        "Soveværelse"
+      ],
+      "mapX": 62,
+      "mapY": 55,
+      "reviews": [
+        {
+          "author": "Ida",
+          "date": "september 2026",
+          "text": "Fantastisk udsigt og meget rent."
+        },
+        {
+          "author": "Peter",
+          "date": "juni 2026",
+          "text": "Lidt larm fra havnen om morgenen, men ellers top."
+        }
+      ]
+    },
+    {
+      "_id": "sk-3",
+      "title": "Hyggelig hytte i klitterne",
+      "location": "Skagen, Danmark",
+      "destination": "Skagen",
+      "category": "cat-cabins",
+      "type": "Hele hytte",
+      "guests": 2,
+      "bedrooms": 1,
+      "beds": 1,
+      "baths": 1,
+      "pricePerNight": 750,
+      "cleaningFee": 200,
+      "rating": 4.79,
+      "reviewCount": 41,
+      "hostName": "Karen",
+      "hostYears": 9,
+      "superhost": true,
+      "guestFavourite": false,
+      "description": "Enkel træhytte gemt mellem klitterne. Ingen tv – bare lyden af havet.",
+      "amenities": [
+        "Køkken",
+        "Gratis parkering",
+        "Udendørs bruser",
+        "Bålplads"
+      ],
+      "photoLabels": [
+        "Hytten i klitterne",
+        "Indretning",
+        "Bålplads"
+      ],
+      "mapX": 28,
+      "mapY": 62,
+      "reviews": [
+        {
+          "author": "Emil",
+          "date": "august 2026",
+          "text": "Total ro. Præcis hvad vi havde brug for."
+        }
+      ]
+    },
+    {
+      "_id": "sk-4",
+      "title": "Kunstnerbolig med stor have",
+      "location": "Skagen, Danmark",
+      "destination": "Skagen",
+      "category": "cat-country",
+      "type": "Hele bolig",
+      "guests": 6,
+      "bedrooms": 3,
+      "beds": 4,
+      "baths": 2,
+      "pricePerNight": 1890,
+      "cleaningFee": 500,
+      "rating": 4.91,
+      "reviewCount": 87,
+      "hostName": "Henrik",
+      "hostYears": 5,
+      "superhost": true,
+      "guestFavourite": true,
+      "description": "Tidligere malerværksted omdannet til rummelig feriebolig med lukket have og plads til hele familien.",
+      "amenities": [
+        "Wi-fi",
+        "Køkken",
+        "Have",
+        "Vaskemaskine",
+        "Børnevenlig",
+        "Gratis parkering"
+      ],
+      "photoLabels": [
+        "Atelier-stuen",
+        "Haven",
+        "Familieværelse",
+        "Spisestue"
+      ],
+      "mapX": 72,
+      "mapY": 28,
+      "reviews": [
+        {
+          "author": "Maja",
+          "date": "juli 2026",
+          "text": "Smukt hus med masser af lys. Børnene elskede haven."
+        }
+      ]
+    },
+    {
+      "_id": "cph-1",
+      "title": "Charmerende lejlighed på Nørrebro",
+      "location": "København, Danmark",
+      "destination": "København",
+      "category": "cat-city",
+      "type": "Hele lejlighed",
+      "guests": 2,
+      "bedrooms": 1,
+      "beds": 1,
+      "baths": 1,
+      "pricePerNight": 1100,
+      "cleaningFee": 300,
+      "rating": 4.85,
+      "reviewCount": 212,
+      "hostName": "Line",
+      "hostYears": 7,
+      "superhost": true,
+      "guestFavourite": true,
+      "description": "Klassisk københavnerlejlighed med plankegulve og franske altaner tæt på Søerne.",
+      "amenities": [
+        "Wi-fi",
+        "Køkken",
+        "Arbejdsplads",
+        "Vaskemaskine"
+      ],
+      "photoLabels": [
+        "Stue",
+        "Fransk altan",
+        "Køkken"
+      ],
+      "mapX": 40,
+      "mapY": 45,
+      "reviews": [
+        {
+          "author": "Tom",
+          "date": "september 2026",
+          "text": "Fantastisk kvarter med gode caféer."
+        }
+      ]
+    },
+    {
+      "_id": "cph-2",
+      "title": "Husbåd i Christianshavn",
+      "location": "København, Danmark",
+      "destination": "København",
+      "category": "cat-view",
+      "type": "Hel husbåd",
+      "guests": 3,
+      "bedrooms": 1,
+      "beds": 2,
+      "baths": 1,
+      "pricePerNight": 1650,
+      "cleaningFee": 350,
+      "rating": 4.97,
+      "reviewCount": 156,
+      "hostName": "Mads",
+      "hostYears": 4,
+      "superhost": true,
+      "guestFavourite": true,
+      "description": "Sov på vandet midt i byen. Tagterrasse med udsigt over kanalerne.",
+      "amenities": [
+        "Wi-fi",
+        "Køkken",
+        "Tagterrasse",
+        "Kajak"
+      ],
+      "photoLabels": [
+        "Husbåden",
+        "Tagterrasse",
+        "Kahyt"
+      ],
+      "mapX": 60,
+      "mapY": 60,
+      "reviews": [
+        {
+          "author": "Clara",
+          "date": "august 2026",
+          "text": "En helt unik oplevelse!"
+        }
+      ]
+    },
+    {
+      "_id": "bh-1",
+      "title": "Granithus ved Gudhjem",
+      "location": "Gudhjem, Danmark",
+      "destination": "Bornholm",
+      "category": "cat-view",
+      "type": "Hele bolig",
+      "guests": 4,
+      "bedrooms": 2,
+      "beds": 2,
+      "baths": 1,
+      "pricePerNight": 1300,
+      "cleaningFee": 350,
+      "rating": 4.93,
+      "reviewCount": 73,
+      "hostName": "Birthe",
+      "hostYears": 8,
+      "superhost": true,
+      "guestFavourite": false,
+      "description": "Gammelt fiskerhus bygget i granit med udsigt over Østersøen og Christiansø.",
+      "amenities": [
+        "Wi-fi",
+        "Køkken",
+        "Havudsigt",
+        "Brændeovn"
+      ],
+      "photoLabels": [
+        "Udsigt over havet",
+        "Stue",
+        "Gårdhave"
+      ],
+      "mapX": 55,
+      "mapY": 35,
+      "reviews": [
+        {
+          "author": "Rasmus",
+          "date": "juni 2026",
+          "text": "Den smukkeste solopgang vi har set."
+        }
+      ]
+    },
+    {
+      "_id": "bh-2",
+      "title": "Lille hytte i Almindingen",
+      "location": "Aakirkeby, Danmark",
+      "destination": "Bornholm",
+      "category": "cat-cabins",
+      "type": "Hel hytte",
+      "guests": 2,
+      "bedrooms": 1,
+      "beds": 1,
+      "baths": 1,
+      "pricePerNight": 690,
+      "cleaningFee": 150,
+      "rating": 4.82,
+      "reviewCount": 39,
+      "hostName": "Ole",
+      "hostYears": 2,
+      "superhost": false,
+      "guestFavourite": false,
+      "description": "Hytte midt i skoven – perfekt base for mountainbike og vandreture.",
+      "amenities": [
+        "Køkken",
+        "Gratis parkering",
+        "Bålplads"
+      ],
+      "photoLabels": [
+        "Hytten i skoven",
+        "Indretning"
+      ],
+      "mapX": 38,
+      "mapY": 66,
+      "reviews": [
+        {
+          "author": "Anna",
+          "date": "maj 2026",
+          "text": "Hyggeligt og enkelt."
+        }
+      ]
+    },
+    {
+      "_id": "aar-1",
+      "title": "Penthouse på Aarhus Ø",
+      "location": "Aarhus, Danmark",
+      "destination": "Aarhus",
+      "category": "cat-city",
+      "type": "Hele lejlighed",
+      "guests": 4,
+      "bedrooms": 2,
+      "beds": 2,
+      "baths": 2,
+      "pricePerNight": 1500,
+      "cleaningFee": 400,
+      "rating": 4.89,
+      "reviewCount": 58,
+      "hostName": "Kasper",
+      "hostYears": 3,
+      "superhost": false,
+      "guestFavourite": true,
+      "description": "Arkitekttegnet penthouse med tagterrasse og udsigt over bugten.",
+      "amenities": [
+        "Wi-fi",
+        "Køkken",
+        "Elevator",
+        "Tagterrasse",
+        "Parkering i kælder"
+      ],
+      "photoLabels": [
+        "Tagterrasse",
+        "Stue",
+        "Badeværelse"
+      ],
+      "mapX": 50,
+      "mapY": 42,
+      "reviews": [
+        {
+          "author": "Freja",
+          "date": "september 2026",
+          "text": "Lækkert og moderne."
+        }
+      ]
+    },
+    {
+      "_id": "lis-1",
+      "title": "Altan med udsigt over Alfama",
+      "location": "Lissabon, Portugal",
+      "destination": "Lissabon",
+      "category": "cat-city",
+      "type": "Hele lejlighed",
+      "guests": 2,
+      "bedrooms": 1,
+      "beds": 1,
+      "baths": 1,
+      "pricePerNight": 890,
+      "cleaningFee": 250,
+      "rating": 4.9,
+      "reviewCount": 301,
+      "hostName": "Inês",
+      "hostYears": 10,
+      "superhost": true,
+      "guestFavourite": true,
+      "description": "Azulejo-beklædt lejlighed i hjertet af Alfama med udsigt over Tejo-floden.",
+      "amenities": [
+        "Wi-fi",
+        "Køkken",
+        "Aircondition",
+        "Altan"
+      ],
+      "photoLabels": [
+        "Altanen",
+        "Stue",
+        "Gaden udenfor"
+      ],
+      "mapX": 45,
+      "mapY": 50,
+      "reviews": [
+        {
+          "author": "Marie",
+          "date": "september 2026",
+          "text": "Bedste udsigt i byen!"
+        }
+      ]
+    }
+  ],
+  "prompts": [
+    {
+      "_id": "q-01",
+      "question": "Hvad er det første, du lægger mærke til på forsiden?",
+      "screen": "explore",
+      "when": "arrive",
+      "trigger": "",
+      "lens": "speed",
+      "observation": "Forsiden præsenterer steder som et feed af produkter: billede, pris, bedømmelse. Destinationen er allerede pakket som noget, man kan bladre i og vælge."
+    },
+    {
+      "_id": "q-02",
+      "question": "Ville du selv starte med at bladre eller søge? Hvorfor?",
+      "screen": "explore",
+      "when": "tap",
+      "trigger": "category",
+      "lens": "speed",
+      "observation": "Kategorierne organiserer verden efter stemning ('Strand', 'Fantastisk udsigt') frem for efter sted. Det gør destinationer udskiftelige: det er oplevelsen, ikke stedet, der vælges."
+    },
+    {
+      "_id": "q-03",
+      "question": "Hvad forventer du at skulle udfylde?",
+      "screen": "explore",
+      "when": "tap",
+      "trigger": "search-bar",
+      "lens": "frictionless",
+      "observation": "Søgningen er skåret ned til tre felter: hvor, hvornår, hvem. Alt andet om stedet er fjernet – designet er bygget til hastighed."
+    },
+    {
+      "_id": "q-04",
+      "question": "Hvorfor vælger du netop den destination? Hvad ved du om stedet?",
+      "screen": "search-where",
+      "when": "tap",
+      "trigger": "destination-suggestion",
+      "lens": "associative",
+      "observation": "En by bliver til én linje tekst og et ikon. Forslagene bygger på popularitet og tidligere søgninger – ikke på stedets kapacitet eller lokalbefolkning. Et oplagt sted for associativt design: hvad forbinder brugeren med stedet?"
+    },
+    {
+      "_id": "q-05",
+      "question": "Hvad styrer dit valg af datoer?",
+      "screen": "search-when",
+      "when": "tap",
+      "trigger": "when-next",
+      "lens": "frictionless",
+      "observation": "Tidspunktet vælges ud fra brugerens kalender alene. Platformen viser ikke højsæson, lokale begivenheder eller hvornår byen er presset."
+    },
+    {
+      "_id": "q-08",
+      "question": "Var der noget, du savnede at kunne angive om dig selv eller rejsen?",
+      "screen": "search-who",
+      "when": "tap",
+      "trigger": "search-button",
+      "lens": "associative",
+      "observation": "Gæster defineres kun som antal og type. Hvem man er som gæst – og hvad man vil bidrage med – er ikke en del af søgningen."
+    },
+    {
+      "_id": "q-10",
+      "question": "Hvad kigger du efter, når du scanner resultaterne?",
+      "screen": "results",
+      "when": "arrive",
+      "trigger": "",
+      "lens": "speed",
+      "observation": "Resultaterne sammenligner boliger på pris, billede og bedømmelse. Stedet er nu blot en ramme om et valg mellem produkter. Badges som 'Gæstefavorit' gør valget hurtigere ved at låne andres dom."
+    },
+    {
+      "_id": "q-11",
+      "question": "Hvilke filtre ville du bruge – og hvilke savner du?",
+      "screen": "filters",
+      "when": "tap",
+      "trigger": "filter-apply",
+      "lens": "local",
+      "observation": "Filtrene handler om boligen og prisen. Der findes ingen filtre for fx lokalt ejede boliger, helårs- vs. fritidsboliger eller bæredygtighed."
+    },
+    {
+      "_id": "q-12",
+      "question": "Hvad betyder beliggenhed for dig her?",
+      "screen": "map",
+      "when": "arrive",
+      "trigger": "",
+      "lens": "associative",
+      "observation": "Kortet viser kun priser. Nabolaget er tomt – ingen butikker, mennesker eller historie. Kortet er et oplagt sted at skabe forbindelser til lokalområdet."
+    },
+    {
+      "_id": "q-14",
+      "question": "Hvad fortæller billederne dig – og hvad fortæller de ikke?",
+      "screen": "detail",
+      "when": "arrive",
+      "trigger": "",
+      "lens": "speed",
+      "observation": "Billederne viser boligen indefra – sjældent gaden, naboerne eller byen. Brugeren forestiller sig opholdet, ikke stedet."
+    },
+    {
+      "_id": "q-15",
+      "question": "Hvad betyder værten for dit valg?",
+      "screen": "detail",
+      "when": "see",
+      "trigger": "detail-host",
+      "lens": "trust",
+      "observation": "Værten præsenteres som servicegarant (Superhost, år som vært) – ikke som nabo eller lokal. Bor værten overhovedet i området?"
+    },
+    {
+      "_id": "q-16",
+      "question": "Hvad leder du efter i anmeldelserne?",
+      "screen": "detail",
+      "when": "see",
+      "trigger": "detail-reviews",
+      "lens": "trust",
+      "observation": "Anmeldelserne vurderer oplevelsen fra gæstens perspektiv. Naboernes og lokalsamfundets perspektiv er fraværende."
+    },
+    {
+      "_id": "q-18",
+      "question": "Hvad får dig til at beslutte dig nu?",
+      "screen": "detail",
+      "when": "tap",
+      "trigger": "reserve-button",
+      "lens": "frictionless",
+      "observation": "Prisen for hele opholdet står i den faste bundbar – beslutningen er altid kun ét tryk væk."
+    },
+    {
+      "_id": "q-19",
+      "question": "Hvad tænker du om prisen, nu du ser den samlet?",
+      "screen": "checkout",
+      "when": "arrive",
+      "trigger": "",
+      "lens": "local",
+      "observation": "Prisen er det eneste tal, brugeren konfronteres med – ikke fx hvor meget af beløbet, der bliver i lokalsamfundet."
+    },
+    {
+      "_id": "q-20",
+      "question": "Hvor sikker følte du dig på dit valg, da du trykkede betal?",
+      "screen": "checkout",
+      "when": "tap",
+      "trigger": "pay-button",
+      "lens": "speed",
+      "observation": "Fra søgning til betaling på få minutter. Destinationen er valgt og købt som en vare."
+    }
+  ]
+}

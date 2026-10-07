@@ -1,0 +1,34 @@
+---
+import '../styles/studio.css';
+---
+
+<!doctype html>
+<html lang="da">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Think-aloud Studio</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23222'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='sans-serif'>S</text></svg>" />
+  </head>
+  <body class="studio">
+    <header class="navbar">
+      <a class="brand" href="#sessions"><span class="logo">S</span><span>Think-aloud Studio</span><small>production</small></a>
+      <nav class="tools">
+        <a class="on" href="#sessions">Struktur</a>
+        <a href="/?mode=free" target="_blank">Presentation ↗</a>
+      </nav>
+      <span class="grow"></span>
+      <a class="nav-btn" href="/" target="_blank">Åbn testen ↗</a>
+      <a class="nav-btn" href="/api/logout">Log ud</a>
+    </header>
+    <main class="panes">
+      <section id="pane-structure" class="pane narrow"></section>
+      <section id="pane-list" class="pane list"></section>
+      <section id="pane-editor" class="pane editor"></section>
+    </main>
+    <div id="toast" class="toast" role="status"></div>
+    <script>
+      import '../scripts/studio';
+    </script>
+  </body>
+</html>

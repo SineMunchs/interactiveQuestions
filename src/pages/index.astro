@@ -1,0 +1,46 @@
+---
+import { getContent } from '../lib/content';
+import '../styles/app.css';
+
+const content = await getContent();
+const embed = Astro.url.searchParams.has('embed');
+---
+
+<!doctype html>
+<html lang="da">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Think-aloud test</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>" />
+  </head>
+  <body class:list={['wt', { embed }]}>
+    <div class="wt-shell">
+      {
+        !embed && (
+          <aside class="wt-side">
+            <header class="wt-head">
+              <div>
+                <p class="eyebrow">Virtuel think-aloud · lowfi prototype</p>
+                <h1>Hvordan vælger du din næste destination?</h1>
+              </div>
+              <a class="admin-link" href="/admin" title="Forskerens Studio">Studio ↗</a>
+            </header>
+            <div id="panel" />
+          </aside>
+        )
+      }
+      <div class="wt-stage">
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="notch"></span><span class="sig">▂▄▆ ◔</span></div>
+          <div id="screen" class="phone-screen"></div>
+          <div class="homebar"></div>
+        </div>
+      </div>
+    </div>
+    <script type="application/json" id="content-data" set:html={JSON.stringify(content).replace(/</g, '\\u003c')} />
+    <script>
+      import '../scripts/walkthrough';
+    </script>
+  </body>
+</html>

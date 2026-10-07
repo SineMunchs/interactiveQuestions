@@ -1,0 +1,170 @@
+[
+  {
+    "_id": "s-muy867nk-v4wh",
+    "participant": "Emma",
+    "flow": "A",
+    "startedAt": 1791384656960,
+    "updatedAt": 1791384657732,
+    "entries": [],
+    "events": [
+      {
+        "t": 1791384657131,
+        "type": "screen",
+        "screen": "explore"
+      },
+      {
+        "t": 1791384657131,
+        "type": "action",
+        "screen": "explore",
+        "detail": "prompt:q-01"
+      }
+    ]
+  },
+  {
+    "_id": "s-muy8744w-jgjr",
+    "participant": "Sine",
+    "flow": "A",
+    "startedAt": 1791384699056,
+    "updatedAt": 1791384828940,
+    "entries": [
+      {
+        "_id": "2g3itunj",
+        "t": 1791384741731,
+        "type": "answer",
+        "screen": "explore",
+        "promptId": "q-01",
+        "question": "Hvad er det første, du lægger mærke til på forsiden?",
+        "text": "populære steder",
+        "source": "voice"
+      },
+      {
+        "_id": "7qram9rs",
+        "t": 1791384820987,
+        "type": "answer",
+        "screen": "detail",
+        "promptId": "q-14",
+        "question": "Hvad fortæller billederne dig – og hvad fortæller de ikke?",
+        "text": "walhflsdf",
+        "source": "text"
+      },
+      {
+        "_id": "djoz5ftm",
+        "t": 1791384822691,
+        "type": "thought",
+        "screen": "detail",
+        "text": "sdvsdV",
+        "source": "text"
+      },
+      {
+        "_id": "wvct9ozl",
+        "t": 1791384828940,
+        "type": "final",
+        "screen": "detail",
+        "promptId": "final",
+        "question": "Hvad ved du nu om stedet, du skal besøge – udover selve boligen? Var der noget, der fik dig til at stoppe op?",
+        "text": "JWEGLNWL",
+        "source": "text"
+      }
+    ],
+    "events": [
+      {
+        "t": 1791384699078,
+        "type": "screen",
+        "screen": "explore"
+      },
+      {
+        "t": 1791384699078,
+        "type": "action",
+        "screen": "explore",
+        "detail": "prompt:q-01"
+      },
+      {
+        "t": 1791384785434,
+        "type": "action",
+        "screen": "detail",
+        "detail": "listing:cph-1"
+      },
+      {
+        "t": 1791384785478,
+        "type": "screen",
+        "screen": "detail"
+      },
+      {
+        "t": 1791384785478,
+        "type": "action",
+        "screen": "detail",
+        "detail": "prompt:q-14"
+      },
+      {
+        "t": 1791384785509,
+        "type": "action",
+        "screen": "detail",
+        "detail": "prompt:q-15"
+      },
+      {
+        "t": 1791384792711,
+        "type": "action",
+        "screen": "detail",
+        "detail": "prompt:q-16"
+      }
+    ],
+    "finishedAt": 1791384828940
+  },
+  {
+    "_id": "s-muy8dypm-mdar",
+    "participant": "Id",
+    "flow": "A",
+    "startedAt": 1791385018618,
+    "updatedAt": 1791385026609,
+    "entries": [],
+    "events": [
+      {
+        "t": 1791385018758,
+        "type": "screen",
+        "screen": "explore"
+      },
+      {
+        "t": 1791385018758,
+        "type": "action",
+        "screen": "explore",
+        "detail": "prompt:q-01"
+      },
+      {
+        "t": 1791385022806,
+        "type": "action",
+        "screen": "explore",
+        "detail": "hometab:experiences"
+      },
+      {
+        "t": 1791385023796,
+        "type": "action",
+        "screen": "explore",
+        "detail": "hometab:services"
+      },
+      {
+        "t": 1791385024625,
+        "type": "action",
+        "screen": "explore",
+        "detail": "category:cat-city"
+      },
+      {
+        "t": 1791385024626,
+        "type": "action",
+        "screen": "explore",
+        "detail": "prompt:q-02"
+      },
+      {
+        "t": 1791385025183,
+        "type": "action",
+        "screen": "explore",
+        "detail": "category:cat-cabins"
+      },
+      {
+        "t": 1791385026007,
+        "type": "action",
+        "screen": "explore",
+        "detail": "category:cat-beach"
+      }
+    ]
+  }
+]

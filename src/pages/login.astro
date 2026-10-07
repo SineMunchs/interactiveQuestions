@@ -1,0 +1,26 @@
+---
+import '../styles/studio.css';
+
+const error = Astro.url.searchParams.has('error');
+const next = Astro.url.searchParams.get('next') ?? '/admin';
+---
+
+<!doctype html>
+<html lang="da">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Studio login</title>
+  </head>
+  <body class="studio login">
+    <form class="login-card" method="post" action="/api/login">
+      <span class="logo">S</span>
+      <h1>Think-aloud Studio</h1>
+      <p>Indtast adgangskoden for at se svar og redigere indhold.</p>
+      <input type="hidden" name="next" value={next} />
+      <input type="password" name="password" placeholder="Adgangskode" autofocus required autocomplete="current-password" />
+      {error && <p class="login-error">Forkert adgangskode – prøv igen.</p>}
+      <button type="submit" class="publish">Log ind</button>
+    </form>
+  </body>
+</html>
