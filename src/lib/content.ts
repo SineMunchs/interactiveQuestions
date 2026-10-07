@@ -1,8 +1,36 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { getStore } from '@netlify/blobs';
+import seedContent from '../../data/content.json';
 
 // Al indhold ligger i én JSON-fil, som admin (/admin) læser og skriver via /api/content.
+// På Netlify kan man ikke skrive til filer, så dér gemmes data i Netlify Blobs.
+// Lokalt (uden Netlify-miljø) bruges filerne i data/ som hidtil.
 const CONTENT_PATH = join(process.cwd(), 'data', 'content.json');
+
+function blobStore() {
+  try {
+    return getStore({ name: 'data', consistency: 'strong' });
+  } catch {
+    return null; // Intet Netlify-miljø → brug filer
+  }
+}
+
+async function readData<T>(key: string, path: string, fallback: T): Promise<T> {
+  const store = blobStore();
+  if (store) return ((await store.get(key, { type: 'json' })) as T | null) ?? fallback;
+  try {
+    return JSON.parse(await readFile(path, 'utf-8'));
+  } catch {
+    return fallback;
+  }
+}
+
+async function writeData(key: string, path: string, data: unknown): Promise<void> {
+  const store = blobStore();
+  if (store) await store.setJSON(key, data);
+  else await writeFile(path, JSON.stringify(data, null, 2) + '\n', 'utf-8');
+}
 
 export interface Settings {
   appName: string;
@@ -86,11 +114,11 @@ export type CollectionKey = 'categories' | 'destinations' | 'listings' | 'prompt
 export const COLLECTIONS: CollectionKey[] = ['prompts', 'listings', 'categories', 'destinations'];
 
 export async function getContent(): Promise<Content> {
-  return JSON.parse(await readFile(CONTENT_PATH, 'utf-8'));
+  return readData('content', CONTENT_PATH, seedContent as Content);
 }
 
 export async function saveContent(content: Content): Promise<void> {
-  await writeFile(CONTENT_PATH, JSON.stringify(content, null, 2) + '\n', 'utf-8');
+  await writeData('content', CONTENT_PATH, content);
 }
 
 // ---------------------------------------------------------------------------
@@ -129,13 +157,9 @@ export interface Session {
 }
 
 export async function getSessions(): Promise<Session[]> {
-  try {
-    return JSON.parse(await readFile(SESSIONS_PATH, 'utf-8'));
-  } catch {
-    return [];
-  }
+  return readData<Session[]>('sessions', SESSIONS_PATH, []);
 }
 
 export async function saveSessions(sessions: Session[]): Promise<void> {
-  await writeFile(SESSIONS_PATH, JSON.stringify(sessions, null, 2) + '\n', 'utf-8');
+  await writeData('sessions', SESSIONS_PATH, sessions);
 }
