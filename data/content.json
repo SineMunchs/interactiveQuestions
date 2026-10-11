@@ -136,6 +136,13 @@
           "date": "juli 2026",
           "text": "Vi kommer helt sikkert igen næste sommer."
         }
+      ],
+      "photos": [
+        "/photos/sk-1-0.jpg",
+        "/photos/sk-1-1.jpg",
+        "/photos/sk-1-2.jpg",
+        "/photos/sk-1-3.jpg",
+        "/photos/sk-1-4.jpg"
       ]
     },
     {
@@ -183,6 +190,11 @@
           "date": "juni 2026",
           "text": "Lidt larm fra havnen om morgenen, men ellers top."
         }
+      ],
+      "photos": [
+        "/photos/sk-2-0.jpg",
+        "/photos/sk-2-1.jpg",
+        "/photos/sk-2-2.jpg"
       ]
     },
     {
@@ -224,6 +236,11 @@
           "date": "august 2026",
           "text": "Total ro. Præcis hvad vi havde brug for."
         }
+      ],
+      "photos": [
+        "/photos/sk-3-0.jpg",
+        "/photos/sk-3-1.jpg",
+        "/photos/sk-3-2.jpg"
       ]
     },
     {
@@ -268,6 +285,12 @@
           "date": "juli 2026",
           "text": "Smukt hus med masser af lys. Børnene elskede haven."
         }
+      ],
+      "photos": [
+        "/photos/sk-4-0.jpg",
+        "/photos/sk-4-1.jpg",
+        "/photos/sk-4-2.jpg",
+        "/photos/sk-4-3.jpg"
       ]
     },
     {
@@ -309,6 +332,11 @@
           "date": "september 2026",
           "text": "Fantastisk kvarter med gode caféer."
         }
+      ],
+      "photos": [
+        "/photos/cph-1-0.jpg",
+        "/photos/cph-1-1.jpg",
+        "/photos/cph-1-2.jpg"
       ]
     },
     {
@@ -350,6 +378,11 @@
           "date": "august 2026",
           "text": "En helt unik oplevelse!"
         }
+      ],
+      "photos": [
+        "/photos/cph-2-0.jpg",
+        "/photos/cph-2-1.jpg",
+        "/photos/cph-2-2.jpg"
       ]
     },
     {
@@ -391,6 +424,11 @@
           "date": "juni 2026",
           "text": "Den smukkeste solopgang vi har set."
         }
+      ],
+      "photos": [
+        "/photos/bh-1-0.jpg",
+        "/photos/bh-1-1.jpg",
+        "/photos/bh-1-2.jpg"
       ]
     },
     {
@@ -430,6 +468,10 @@
           "date": "maj 2026",
           "text": "Hyggeligt og enkelt."
         }
+      ],
+      "photos": [
+        "/photos/bh-2-0.jpg",
+        "/photos/bh-2-1.jpg"
       ]
     },
     {
@@ -472,6 +514,11 @@
           "date": "september 2026",
           "text": "Lækkert og moderne."
         }
+      ],
+      "photos": [
+        "/photos/aar-1-0.jpg",
+        "/photos/aar-1-1.jpg",
+        "/photos/aar-1-2.jpg"
       ]
     },
     {
@@ -513,6 +560,11 @@
           "date": "september 2026",
           "text": "Bedste udsigt i byen!"
         }
+      ],
+      "photos": [
+        "/photos/lis-1-0.jpg",
+        "/photos/lis-1-1.jpg",
+        "/photos/lis-1-2.jpg"
       ]
     }
   ],

@@ -109,6 +109,12 @@ const featuredFirst = (arr: Listing[]) =>
 // ---------------------------------------------------------------------------
 
 const ph = (label: string, cls = '') => `<div class="ph ${cls}"><span>${esc(label)}</span></div>`;
+// Boligens foto nr. i – falder tilbage til en placeholder med labelen, hvis der ikke er et billede
+const photo = (l: Listing, i = 0, cls = '') => {
+  const label = l.photoLabels[i] ?? 'Foto';
+  const src = l.photos?.[i];
+  return src ? `<div class="ph photo ${cls}"><img src="${esc(src)}" alt="${esc(label)}" loading="lazy"></div>` : ph(label, cls);
+};
 
 function heartBtn(id: string, target = 'heart') {
   const on = state.wishlist.has(id);
@@ -121,7 +127,7 @@ function card(l: Listing, opts: { compact?: boolean } = {}) {
   return `
   <article class="card ${opts.compact ? 'compact' : ''}" data-action="listing" data-arg="${l._id}" data-target="listing-card">
     <div class="card-photo">
-      ${ph(l.photoLabels[0] ?? 'Foto')}
+      ${photo(l)}
       ${l.guestFavourite ? '<span class="badge">Gæstefavorit</span>' : ''}
       ${heartBtn(l._id)}
       ${opts.compact ? '' : `<div class="dots">${l.photoLabels.map((_, i) => `<i class="${i === 0 ? 'on' : ''}"></i>`).join('')}</div>`}
@@ -367,12 +373,12 @@ const screens: Record<string, () => string> = {
   detail() {
     const l = listing();
     const p = priceFor(l);
-    const photo = l.photoLabels[state.photoIdx % l.photoLabels.length] ?? 'Foto';
+    const photoIdx = state.photoIdx % Math.max(l.photoLabels.length, 1);
     return `
     <div class="scr">
       <main class="scr-body">
         <div class="gallery" data-action="photo-next" data-target="detail-photos">
-          ${ph(photo, 'tall')}
+          ${photo(l, photoIdx, 'tall')}
           <div class="gallery-btns">
             <button class="circle white" data-action="back" aria-label="Tilbage">${icon.back}</button>
             <span class="grow"></span>
@@ -450,7 +456,7 @@ const screens: Record<string, () => string> = {
       <div class="topbar center-title"><button class="circle plain" data-action="back" aria-label="Tilbage">${icon.back}</button><strong>Bekræft og betal</strong><span class="circle plain"></span></div>
       <main class="scr-body pad">
         <div class="mini-listing">
-          ${ph(l.photoLabels[0] ?? '', 'thumb')}
+          ${photo(l, 0, 'thumb')}
           <div><strong>${esc(l.title)}</strong><small>${esc(l.type)}</small><small>${icon.star} ${l.rating.toFixed(2).replace('.', ',')} (${l.reviewCount})${l.superhost ? ' · Superhost' : ''}</small></div>
         </div>
         <div class="box" data-target="trip-dates">
@@ -500,7 +506,7 @@ const screens: Record<string, () => string> = {
         <h1>Du skal til ${esc(l.destination)}!</h1>
         <p class="muted center">Reservation bekræftet. Vi har sendt en kvittering til din e-mail.</p>
         <div class="trip-card">
-          ${ph(l.photoLabels[0] ?? '', 'wide')}
+          ${photo(l, 0, 'wide')}
           <div class="pad-s"><strong>${esc(l.title)}</strong><small>${dateRange(b?.start, b?.end)} · ${guestLabel(b?.guests)}</small><small>Vært: ${esc(l.hostName)}</small></div>
         </div>
         <button class="btn dark full" data-action="view-trip" data-target="view-trip">Se rejse</button>
@@ -519,7 +525,7 @@ const screens: Record<string, () => string> = {
           l
             ? `<p class="label">Kommende</p>
                <div class="trip-card" data-target="trip-card">
-                 ${ph(l.photoLabels[0] ?? '', 'wide')}
+                 ${photo(l, 0, 'wide')}
                  <div class="pad-s"><strong>${esc(l.destination)}</strong><small>${esc(l.title)} · Vært: ${esc(l.hostName)}</small>
                  <div class="trip-dates"><span><small>Check-in</small>${dateRange(b!.start).replace(/\.$/, '')}</span><span><small>Check-ud</small>${dateRange(b!.end)}</span></div></div>
                </div>`
@@ -538,7 +544,7 @@ const screens: Record<string, () => string> = {
         <h1 class="page-title">Ønskelister</h1>
         <div class="wl-grid">
           <div class="wl" data-target="wishlist-card">${ph('Senest set')}<strong>Senest set</strong><small>I dag</small></div>
-          ${saved.length ? `<div class="wl" data-target="wishlist-card">${ph(saved[0].photoLabels[0] ?? '')}<strong>Weekend ved havet</strong><small>${saved.length} gemt</small></div>` : ''}
+          ${saved.length ? `<div class="wl" data-target="wishlist-card">${photo(saved[0])}<strong>Weekend ved havet</strong><small>${saved.length} gemt</small></div>` : ''}
         </div>
         ${
           saved.length
@@ -987,6 +993,8 @@ function renderPanel(done = false) {
   const phone = document.querySelector('.phone');
   phone?.classList.toggle('locked', mode === 'test' && !session && !isEmbed);
   if (!panelEl) return;
+  // Velkomstskærmen bruger et bredere panel i to kolonner, så alt kan ses uden scroll
+  panelEl.parentElement?.classList.toggle('intro', mode === 'test' && !session && !done);
 
   if (mode === 'free') {
     panelEl.innerHTML = `
@@ -1014,19 +1022,26 @@ function renderPanel(done = false) {
 
   if (!session) {
     panelEl.innerHTML = `
-      <div class="panel-card">
-        <p class="eyebrow">Think-aloud-test</p>
-        <h2>Velkommen 👋</h2>
-        <p>Du skal bruge en prototype af Airbnb-appen. Det er appen, vi tester – ikke dig.</p>
-        <div class="task"><strong>Din opgave</strong><p>${esc(settings.testTask)}</p></div>
-        <ul class="howto">
-          <li>Sig eller skriv, hvad du tænker – også det, der virker ubetydeligt.</li>
-          <li>Undervejs dukker der spørgsmål op. Du kan altid springe over.</li>
-          <li>Tryk <em>Jeg er færdig</em>, når du har booket – eller vil stoppe.</li>
-        </ul>
-        <label class="field-l" for="participant">Dit navn eller deltager-ID</label>
-        <input id="participant" class="text-in" placeholder="Fx Deltager 4" autocomplete="off" value="${esc(participantDraft)}">
-        <button class="primary full mt" data-start>Start testen</button>
+      <div class="panel-card intro-card">
+        <div>
+          <p class="eyebrow">Think-aloud-test · ca. 10–15 min.</p>
+          <h2>Velkommen 👋</h2>
+          <p class="intro-what"><strong>Hvad er en think-aloud-test?</strong> Du bruger appen og fortæller løbende, hvad du tænker – hvad du kigger efter, forventer og undrer dig over. Det er appen, vi tester – ikke dig.</p>
+          <p class="steps-h">Sådan gør du</p>
+          <ol class="howto">
+            <li>Skriv det <strong>deltager-ID, du har fået af os</strong>, og tryk <em>Start testen</em>.</li>
+            <li>Løs opgaven i telefonen, som du ville gøre i virkeligheden.</li>
+            <li>Skriv dine tanker i feltet <em>Hvad tænker du lige nu?</em> – eller brug mikrofonen.</li>
+            <li>Svar kort på de spørgsmål, der dukker op, eller spring over.</li>
+            <li>Tryk <em>Jeg er færdig</em>, når du har booket eller vil stoppe.</li>
+          </ol>
+        </div>
+        <div class="intro-start">
+          <div class="task"><strong>Din opgave</strong><p>${esc(settings.testTask)}</p></div>
+          <label class="field-l" for="participant">Dit deltager-ID</label>
+          <input id="participant" class="text-in" placeholder="Det ID, du har fået af os" autocomplete="off" value="${esc(participantDraft)}">
+          <button class="primary full mt" data-start>Start testen</button>
+        </div>
       </div>
       <button class="link-btn" data-free>Udforsk uden at gemme (forsker)</button>`;
     return;
@@ -1065,7 +1080,8 @@ function renderPanel(done = false) {
     }
     <div class="panel-card thought-card">
       <h2>Hvad tænker du lige nu?</h2>
-      <textarea id="ta-thought" class="ta" rows="3" placeholder="Skriv – eller tryk på mikrofonen og sig det højt …">${esc(drafts.thought)}</textarea>
+      <p class="thought-help">Skriv, hvad du lægger mærke til, leder efter, undrer dig over eller er i tvivl om – også småting. Tryk <em>Gem tanke</em> hver gang. Du kan gemme så mange tanker, du vil.</p>
+      <textarea id="ta-thought" class="ta" rows="3" placeholder="Fx »Jeg leder efter, hvor tæt på vandet det ligger …«">${esc(drafts.thought)}</textarea>
       <div class="row-btns">${micBtn('thought')}<span class="grow"></span><button class="primary sm" data-thought>Gem tanke</button></div>
       <small class="where">Gemmes sammen med skærmen: <span id="cur-screen">${esc(screenLabel(state.screen))}</span></small>
     </div>

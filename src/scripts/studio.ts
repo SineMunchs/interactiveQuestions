@@ -112,7 +112,8 @@ const TYPES: DocType[] = [
         options: () => content.categories.map((c) => ({ value: c._id, title: `${c.icon} ${c.name}` })),
       },
       { name: 'description', title: 'Beskrivelse', type: 'text', group: 'content' },
-      { name: 'photoLabels', title: 'Fotos', type: 'tags', group: 'content', description: 'Lowfi: hver label bliver til en placeholder i galleriet.' },
+      { name: 'photoLabels', title: 'Fotos', type: 'tags', group: 'content', description: 'Hver label er et billede i galleriet (bruges som placeholder, hvis der ikke er en billed-URL).' },
+      { name: 'photos', title: 'Billed-URL\'er', type: 'tags', group: 'content', description: 'Én URL pr. label, i samme rækkefølge. Fx /photos/sk-1-0.jpg eller et link til et billede.' },
       {
         name: 'type', title: 'Type af sted', type: 'select', group: 'details',
         options: () => ['Hele bolig', 'Hele lejlighed', 'Hele hytte', 'Hel husbåd', 'Privat værelse'].map((v) => ({ value: v, title: v })),

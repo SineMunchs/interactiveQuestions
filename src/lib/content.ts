@@ -86,6 +86,7 @@ export interface Listing {
   description: string;
   amenities: string[];
   photoLabels: string[];
+  photos?: string[]; // Billed-URL'er i samme rækkefølge som photoLabels
   mapX: number;
   mapY: number;
   reviews: Review[];
