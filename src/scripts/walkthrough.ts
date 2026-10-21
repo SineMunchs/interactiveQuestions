@@ -1,6 +1,6 @@
 import { icon } from './icons';
 import { SCREENS } from '../lib/screens';
-import type { Content, Listing, Prompt, Session, SessionEntry } from '../lib/content';
+import type { Content, Listing, Prompt, Session, SessionEntry, SessionEvent } from '../lib/content';
 
 // ---------------------------------------------------------------------------
 // Data & tilstand
@@ -18,7 +18,6 @@ function initialState() {
     screen: 'explore',
     history: [] as string[],
     category: '',
-    homeTab: 'homes',
     query: '',
     destination: '',
     start: '',
@@ -85,6 +84,18 @@ function priceFor(l: Listing) {
   const base = l.pricePerNight * n;
   const fee = Math.round(((base + l.cleaningFee) * settings.serviceFeePct) / 100);
   return { n, base, cleaning: l.cleaningFee, fee, total: base + l.cleaningFee + fee };
+}
+
+function promptQuestion(p: Prompt) {
+  const l = listing();
+  const pTotal = priceFor(l).total;
+  if (p._id === 'q-18') {
+    return `Hvad får dig til at beslutte dig for ${kr(pTotal)} i alt for ${dateRange() || 'opholdet'}?`;
+  }
+  if (p._id === 'q-19') {
+    return `Hvad tænker du om den samlede pris på ${kr(pTotal)} for ${dateRange() || 'opholdet'}?`;
+  }
+  return p.question;
 }
 
 function searchResults() {
@@ -179,11 +190,6 @@ function searchSummary() {
 
 const screens: Record<string, () => string> = {
   explore() {
-    const homeTabs = [
-      ['homes', 'Hjem', '🏠'],
-      ['experiences', 'Oplevelser', '🎈'],
-      ['services', 'Tjenester', '🛎️'],
-    ];
     let feed = '';
     if (state.category) {
       const items = featuredFirst(listings.filter((l) => l.category === state.category));
@@ -203,9 +209,7 @@ const screens: Record<string, () => string> = {
     <div class="scr">
       <div class="explore-top">
         <button class="searchpill" data-action="open-search" data-target="search-bar">${icon.search}<span>${esc(settings.searchPlaceholder)}</span></button>
-        <div class="hometabs">${homeTabs
-          .map(([id, l, e]) => `<button class="${state.homeTab === id ? 'on' : ''}" data-action="hometab" data-arg="${id}"><span class="emo">${e}</span>${l}</button>`)
-          .join('')}</div>
+        <div class="hometabs"><button class="on" data-action="hometab" data-arg="homes"><span class="emo">🏠</span>Hjem</button></div>
         <div class="cats">${categories
           .map(
             (c) =>
@@ -459,10 +463,6 @@ const screens: Record<string, () => string> = {
           ${photo(l, 0, 'thumb')}
           <div><strong>${esc(l.title)}</strong><small>${esc(l.type)}</small><small>${icon.star} ${l.rating.toFixed(2).replace('.', ',')} (${l.reviewCount})${l.superhost ? ' · Superhost' : ''}</small></div>
         </div>
-        <div class="box" data-target="trip-dates">
-          <div class="row"><div><strong>Datoer</strong><small>${dateRange()}</small></div><button class="link sm" data-action="edit-dates">Rediger</button></div>
-          <div class="row"><div><strong>Gæster</strong><small>${guestLabel()}</small></div><button class="link sm" data-action="edit-guests">Rediger</button></div>
-        </div>
         <div class="box" data-target="price-details">
           <div class="row" data-action="price-toggle"><div><strong>Samlet pris</strong><small>${kr(p.total)} DKK</small></div><button class="link sm">${state.priceOpen ? 'Skjul' : 'Detaljer'}</button></div>
           ${
@@ -474,6 +474,10 @@ const screens: Record<string, () => string> = {
                   <div class="tot"><span>I alt (DKK)</span><span>${kr(p.total)}</span></div></div>`
               : ''
           }
+        </div>
+        <div class="box" data-target="trip-dates">
+          <div class="row"><div><strong>Datoer</strong><small>${dateRange()}</small></div><button class="link sm" data-action="edit-dates">Rediger</button></div>
+          <div class="row"><div><strong>Gæster</strong><small>${guestLabel()}</small></div><button class="link sm" data-action="edit-guests">Rediger</button></div>
         </div>
         <div class="box">
           <strong>Vælg hvornår du vil betale</strong>
@@ -625,7 +629,7 @@ function searchModal(open: 'where' | 'when' | 'who', body: string, footer?: stri
   <div class="scr modal search">
     <div class="topbar">
       <button class="circle" data-action="close-search" aria-label="Luk">${icon.close}</button>
-      <div class="hometabs mini"><button class="on"><span class="emo">🏠</span>Hjem</button><button><span class="emo">🎈</span>Oplevelser</button><button><span class="emo">🛎️</span>Tjenester</button></div>
+      <div class="hometabs mini"><button class="on" data-action="hometab" data-arg="homes"><span class="emo">🏠</span>Hjem</button></div>
     </div>
     <main class="scr-body">
       ${open === 'where' ? `<section class="sbox">${body}</section>` : collapsed('where', 'Hvor', state.destination || 'Hvor som helst')}
@@ -659,7 +663,7 @@ function act(action: string, arg = '') {
       state.screen = state.history.pop() ?? 'explore';
       break;
     case 'hometab':
-      state.homeTab = arg;
+      if (arg !== 'homes') return;
       break;
     case 'category':
       state.category = state.category === arg ? '' : arg;
@@ -852,6 +856,7 @@ function screenLabel(id: string) {
 const SESSION_KEY = 'think-aloud-session';
 let session: Session | null = null;
 let finishing = false;
+let finalIndex = 0;
 let pending: Prompt[] = [];
 const asked = new Set<string>();
 const drafts = { thought: '', answer: '', final: '' };
@@ -868,12 +873,35 @@ function queuePrompt(p: Prompt) {
   pending.push(p);
   logEvent('action', `prompt:${p._id}`);
   renderPanel();
+  showPromptReminder(p);
   document.querySelector('.q-card')?.classList.add('pop');
 }
 
-function logEvent(type: 'screen' | 'action', detail: string) {
+let promptReminderTimer = 0;
+function showPromptReminder(p: Prompt) {
+  document.querySelector('.prompt-reminder')?.remove();
+  const reminder = document.createElement('aside');
+  reminder.className = 'prompt-reminder';
+  reminder.setAttribute('role', 'status');
+  const target = SCREENS.find((screen) => screen.id === p.screen)?.targets.find((item) => item.id === p.trigger);
+  const context = target ? `${screenLabel(p.screen)} · ${target.label}` : screenLabel(p.screen);
+  reminder.innerHTML = `
+    <strong>Se på telefonen og skriv</strong>
+    <p>Spørgsmålet handler om det, du ser lige nu. Skriv dit svar i feltet ved siden af.</p>
+    <em>${esc(promptQuestion(p))}</em>
+    <small>Du er her: ${esc(context)}</small>`;
+  document.body.append(reminder);
+  window.clearTimeout(promptReminderTimer);
+  promptReminderTimer = window.setTimeout(() => reminder.remove(), 14000);
+}
+
+function logEvent(
+  type: 'screen' | 'action',
+  detail: string,
+  metadata?: Pick<SessionEvent, 'action' | 'arg' | 'target' | 'label'>,
+) {
   if (!session) return;
-  session.events.push({ t: Date.now(), type, screen: state.screen, detail: type === 'action' ? detail : undefined });
+  session.events.push({ t: Date.now(), type, screen: state.screen, detail: type === 'action' ? detail : undefined, ...metadata });
   saveSession();
 }
 
@@ -903,6 +931,7 @@ function startSession(participant: string) {
   state = initialState();
   lastScreen = '';
   pending = [];
+  finalIndex = 0;
   asked.clear();
   renderPanel();
   render();
@@ -921,7 +950,8 @@ function resumeSession() {
 
 async function finishSession() {
   if (!session) return;
-  addEntry('final', drafts.final, voiceUsed.final ? 'voice' : 'text', { _id: 'final', question: settings.finalQuestion });
+  const questions = settings.finalQuestions?.length ? settings.finalQuestions : [settings.finalQuestion];
+  addEntry('final', drafts.final, voiceUsed.final ? 'voice' : 'text', { _id: `final-${finalIndex}`, question: questions[finalIndex] });
   session.finishedAt = Date.now();
   await saveSession(true);
   try {
@@ -1031,15 +1061,15 @@ function renderPanel(done = false) {
           <ol class="howto">
             <li>Skriv det <strong>deltager-ID, du har fået af os</strong>, og tryk <em>Start testen</em>.</li>
             <li>Løs opgaven i telefonen, som du ville gøre i virkeligheden.</li>
-            <li>Skriv dine tanker i feltet <em>Hvad tænker du lige nu?</em> – eller brug mikrofonen.</li>
-            <li>Svar kort på de spørgsmål, der dukker op, eller spring over.</li>
+            <li><strong>Husk at skrive undervejs:</strong> Brug feltet <em>Husk at skrive undervejs</em> efter hver vigtig ting, du ser eller tænker – eller brug mikrofonen.</li>
+            <li>Når et spørgsmål dukker op, skal du først se på telefonen og derefter skrive dit svar i panelet.</li>
             <li>Tryk <em>Jeg er færdig</em>, når du har booket eller vil stoppe.</li>
           </ol>
         </div>
         <div class="intro-start">
           <div class="task"><strong>Din opgave</strong><p>${esc(settings.testTask)}</p></div>
-          <label class="field-l" for="participant">Dit deltager-ID</label>
-          <input id="participant" class="text-in" placeholder="Det ID, du har fået af os" autocomplete="off" value="${esc(participantDraft)}">
+          <label class="field-l" for="participant">Dine initialer (2–4 bogstaver)</label>
+          <input id="participant" class="text-in" placeholder="Fx AB" autocomplete="off" maxlength="4" pattern="[A-Za-zÆØÅæøå]{2,4}" value="${esc(participantDraft)}">
           <button class="primary full mt" data-start>Start testen</button>
         </div>
       </div>
@@ -1048,13 +1078,16 @@ function renderPanel(done = false) {
   }
 
   if (finishing) {
+    const finalQuestions = settings.finalQuestions?.length ? settings.finalQuestions : [settings.finalQuestion];
+    const finalQuestion = finalQuestions[finalIndex] ?? finalQuestions[finalQuestions.length - 1];
+    const isLastFinalQuestion = finalIndex >= finalQuestions.length - 1;
     panelEl.innerHTML = `
       <div class="panel-card">
-        <p class="eyebrow">Sidste spørgsmål</p>
-        <h2>${esc(settings.finalQuestion)}</h2>
+        <p class="eyebrow">Afsluttende spørgsmål ${finalIndex + 1} af ${finalQuestions.length}</p>
+        <h2>${esc(finalQuestion)}</h2>
         <textarea id="ta-final" class="ta" rows="5" placeholder="Skriv dit svar …">${esc(drafts.final)}</textarea>
         <div class="row-btns">${micBtn('final')}<span class="grow"></span></div>
-        <div class="nav"><button class="ghost" data-unfinish>← Tilbage til appen</button><button class="primary" data-finish>Afslut og gem</button></div>
+        <div class="nav"><button class="ghost" data-unfinish>← Tilbage til appen</button><button class="primary" data-${isLastFinalQuestion ? 'finish' : 'final-next'}>${isLastFinalQuestion ? 'Afslut og gem' : 'Næste spørgsmål →'}</button></div>
       </div>`;
     return;
   }
@@ -1071,18 +1104,19 @@ function renderPanel(done = false) {
     ${
       q
         ? `<div class="panel-card q-card">
-            <p class="eyebrow">💬 Spørgsmål ${pending.length > 1 ? `· ${pending.length} venter` : ''}</p>
-            <h2>${esc(q.question)}</h2>
+            <p class="question-label">💬 Spørgsmål${pending.length > 1 ? ` <span>· ${pending.length} venter</span>` : ''}</p>
+            <h2>${esc(promptQuestion(q))}</h2>
+            <p class="question-help"><strong>✍ Skriv dit svar</strong><br><span><strong>Se på telefonen først.</strong> Dette spørgsmål handler om det, der vises på skærmen lige nu. Skriv det første, du tænker — der er ikke noget rigtigt svar.</span></p>
             <textarea id="ta-answer" class="ta" rows="3" placeholder="Skriv dit svar …">${esc(drafts.answer)}</textarea>
             <div class="row-btns">${micBtn('answer')}<span class="grow"></span><button class="ghost sm" data-skip>Spring over</button><button class="primary sm" data-answer>Gem svar</button></div>
           </div>`
         : ''
     }
     <div class="panel-card thought-card">
-      <h2>Hvad tænker du lige nu?</h2>
-      <p class="thought-help">Skriv, hvad du lægger mærke til, leder efter, undrer dig over eller er i tvivl om – også småting. Tryk <em>Gem tanke</em> hver gang. Du kan gemme så mange tanker, du vil.</p>
+      <h2>Husk at skrive undervejs</h2>
+      <p class="thought-help">Notér alt det, du ser, gør eller tænker, mens du bruger telefonen. Du må også gerne indtale det højt, mens du gør det.</p>
       <textarea id="ta-thought" class="ta" rows="3" placeholder="Fx »Jeg leder efter, hvor tæt på vandet det ligger …«">${esc(drafts.thought)}</textarea>
-      <div class="row-btns">${micBtn('thought')}<span class="grow"></span><button class="primary sm" data-thought>Gem tanke</button></div>
+      <div class="row-btns">${micBtn('thought')}<span class="grow"></span><button class="primary sm" data-thought>Gem note</button></div>
       <small class="where">Gemmes sammen med skærmen: <span id="cur-screen">${esc(screenLabel(state.screen))}</span></small>
     </div>
     ${
@@ -1106,15 +1140,20 @@ phoneEl.addEventListener('click', (e) => {
   if (t.closest('input') || (mode === 'test' && !session && !isEmbed)) return;
   const actionEl = t.closest<HTMLElement>('[data-action]');
   const targetEl = t.closest<HTMLElement>('[data-target]');
+  const button = t.closest<HTMLButtonElement>('button');
   const action = actionEl?.dataset.action ?? '';
+  const arg = actionEl?.dataset.arg ?? '';
+  const label = button?.getAttribute('aria-label') || button?.textContent?.replace(/\s+/g, ' ').trim() || '';
   if (action) {
-    act(action, actionEl!.dataset.arg);
-    logEvent('action', `${action}${actionEl!.dataset.arg ? ':' + actionEl!.dataset.arg : ''}`);
+    act(action, arg);
+    logEvent('action', 'click', { action, arg, target: targetEl?.dataset.target, label });
     if (action === 'pay' && session) {
       session.booked = listing().title;
       saveSession();
       renderPanel();
     }
+  } else if (button) {
+    logEvent('action', 'click', { target: targetEl?.dataset.target, label });
   }
   // Spørgsmål til det, der blev trykket på, kommer før spørgsmål til den næste skærm
   if (targetEl) promptsFor('tap').filter((p) => p.trigger === targetEl.dataset.target).forEach(queuePrompt);
@@ -1152,8 +1191,8 @@ panelEl?.addEventListener('click', (e) => {
   if (d.mic) return toggleMic(d.mic as keyof typeof drafts);
   rec?.stop();
   if ('start' in d) {
-    const name = participantDraft.trim();
-    if (!name) {
+    const name = participantDraft.trim().toUpperCase();
+    if (!/^[A-ZÆØÅ]{2,4}$/.test(name)) {
       document.getElementById('participant')?.classList.add('invalid');
       document.getElementById('participant')?.focus();
       return;
@@ -1161,7 +1200,7 @@ panelEl?.addEventListener('click', (e) => {
     startSession(name);
   } else if ('answer' in d || 'skip' in d) {
     const q = pending.shift()!;
-    if ('answer' in d) addEntry('answer', drafts.answer, voiceUsed.answer ? 'voice' : 'text', q);
+    if ('answer' in d) addEntry('answer', drafts.answer, voiceUsed.answer ? 'voice' : 'text', { ...q, question: promptQuestion(q) });
     else logEvent('action', `skip:${q._id}`);
     drafts.answer = '';
     voiceUsed.answer = false;
@@ -1173,15 +1212,26 @@ panelEl?.addEventListener('click', (e) => {
     renderPanel();
   } else if ('done' in d) {
     finishing = true;
+    finalIndex = 0;
+    drafts.final = '';
+    voiceUsed.final = false;
     renderPanel();
   } else if ('unfinish' in d) {
     finishing = false;
+    renderPanel();
+  } else if ('final-next' in d) {
+    const questions = settings.finalQuestions?.length ? settings.finalQuestions : [settings.finalQuestion];
+    addEntry('final', drafts.final, voiceUsed.final ? 'voice' : 'text', { _id: `final-${finalIndex}`, question: questions[finalIndex] });
+    finalIndex += 1;
+    drafts.final = '';
+    voiceUsed.final = false;
     renderPanel();
   } else if ('finish' in d) {
     finishSession();
   } else if ('new' in d) {
     session = null;
     Object.assign(drafts, { thought: '', answer: '', final: '' });
+    finalIndex = 0;
     state = initialState();
     lastScreen = '';
     render();

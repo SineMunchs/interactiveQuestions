@@ -38,6 +38,7 @@ export interface Settings {
   researchQuestion: string;
   testTask: string;
   finalQuestion: string;
+  finalQuestions?: string[];
   searchPlaceholder: string;
   currency: string;
   serviceFeePct: number;
@@ -144,6 +145,10 @@ export interface SessionEvent {
   type: 'screen' | 'action';
   screen: string;
   detail?: string;
+  action?: string;
+  arg?: string;
+  target?: string;
+  label?: string;
 }
 
 export interface Session {

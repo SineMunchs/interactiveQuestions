@@ -9,7 +9,14 @@
     "showAccent": true,
     "researchQuestion": "Hvordan gør Airbnbs digitale platform rejsedestinationer til noget, man hurtigt kan vælge og forbruge, og hvordan kan associativt design og bevidst friktion bruges til at gentænke bookingoplevelsen, så brugeren bliver mere opmærksom på det lokalsamfund og nabolag, de besøger?",
     "testTask": "Forestil dig, at du skal på en forlænget weekend ved havet med en anden voksen i november. Brug appen til at finde og booke et sted. Sig eller skriv, hvad du tænker undervejs – der er ingen forkerte svar.",
-    "finalQuestion": "Hvad ved du nu om stedet, du skal besøge – udover selve boligen? Var der noget, der fik dig til at stoppe op?"
+    "finalQuestion": "Hvad ved du nu om stedet, du skal besøge – udover selve boligen? Var der noget, der fik dig til at stoppe op?",
+    "finalQuestions": [
+      "Hvordan oplevede du processen med at finde og vælge en bolig?",
+      "Hvad havde størst betydning for dit valg, og hvorfor?",
+      "Var der noget undervejs, der fik dig til at stoppe op eller genoverveje dit valg?",
+      "Hvilke tanker gjorde du dig om området og de mennesker, der bor der?",
+      "Hvordan ville du selv forbedre Airbnbs bookingproces?"
+    ]
   },
   "categories": [
     {
@@ -690,8 +697,8 @@
       "_id": "q-19",
       "question": "Hvad tænker du om prisen, nu du ser den samlet?",
       "screen": "checkout",
-      "when": "arrive",
-      "trigger": "",
+      "when": "see",
+      "trigger": "price-details",
       "lens": "local",
       "observation": "Prisen er det eneste tal, brugeren konfronteres med – ikke fx hvor meget af beløbet, der bliver i lokalsamfundet."
     },

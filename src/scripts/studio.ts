@@ -187,6 +187,7 @@ const SETTINGS_TYPE: DocType = {
     { name: 'researchQuestion', title: 'Forskningsspørgsmål', type: 'text', description: 'Til dig selv og teamet – vises ikke for deltagerne.' },
     { name: 'testTask', title: 'Opgave til deltageren', type: 'text', required: true, description: 'Vises på startskærmen og øverst i panelet under hele testen.' },
     { name: 'finalQuestion', title: 'Afsluttende spørgsmål', type: 'text', required: true },
+    { name: 'finalQuestions', title: 'Afsluttende spørgsmål (liste)', type: 'tags', description: 'Vises ét ad gangen, når deltageren trykker “Jeg er færdig”.' },
     {
       name: 'featuredListingId', title: 'Fremhævet bolig', type: 'reference', required: true,
       description: 'Vises først i resultater og på forsiden.',
@@ -658,6 +659,55 @@ const ENTRY_LABEL: Record<SessionEntry['type'], string> = { answer: 'Svar', thou
 const screenName = (id: string) => SCREENS.find((s) => s.id === id)?.label ?? id;
 const promptById = (id: string) => content.prompts.find((p) => p._id === id);
 const fmtDate = (t: number) => new Date(t).toLocaleString('da-DK', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+const actionName: Record<string, string> = {
+  back: 'Tilbage',
+  category: 'Valgte kategori',
+  'close-search': 'Lukkede søgning',
+  date: 'Valgte dato',
+  dest: 'Valgte destination',
+  'edit-dates': 'Redigerede datoer',
+  'edit-guests': 'Redigerede gæster',
+  'filters-reset': 'Nulstillede filtre',
+  guest: 'Ændrede gæster',
+  heart: 'Gemte/fjernede bolig',
+  hometab: 'Valgte Hjem',
+  list: 'Viste liste',
+  map: 'Viste kort',
+  'open-filters': 'Åbnede filtre',
+  'open-search': 'Åbnede søgning',
+  pay: 'Bekræftede og betalte',
+  'pay-plan': 'Valgte betalingsplan',
+  'place-type': 'Valgte boligtype',
+  'price-toggle': 'Åbnede/lukkede prisdetaljer',
+  reserve: 'Trykkede Reserver',
+  search: 'Søgte',
+  'search-clear': 'Nulstillede søgning',
+  'search-step': 'Gik til søgetrin',
+  tab: 'Åbnede fane',
+  'view-trip': 'Åbnede rejse',
+  'when-next': 'Gik videre fra datoer',
+};
+const formatAction = (detail: string) => {
+  const [action, ...args] = detail.split(':');
+  const label = actionName[action] ?? action;
+  return args.length ? `${label}: ${args.join(':')}` : label;
+};
+const clickEvents = (s: Session) => s.events.filter((ev) => ev.type === 'action' && (ev.action || ev.detail === 'click'));
+const clickLabel = (ev: Session['events'][number]) => {
+  if (ev.label) return ev.label;
+  if (ev.action === 'listing' && ev.arg) {
+    const selected = content.listings.find((listing) => listing._id === ev.arg);
+    return selected ? `Valgte bolig: ${selected.title} · ${selected.location}` : `Valgte bolig: ${ev.arg}`;
+  }
+  if (ev.detail?.startsWith('listing:')) {
+    const selected = content.listings.find((listing) => listing._id === ev.detail!.slice('listing:'.length));
+    return selected ? `Valgte bolig: ${selected.title} · ${selected.location}` : `Valgte bolig: ${ev.detail.slice('listing:'.length)}`;
+  }
+  if (ev.action) return `${actionName[ev.action] ?? ev.action}${ev.arg ? `: ${ev.arg}` : ''}`;
+  return ev.detail ? formatAction(ev.detail) : 'Ukendt knap';
+};
+const clickActionLabel = (ev: Session['events'][number]) =>
+  ev.action ? actionName[ev.action] ?? ev.action : ev.detail?.startsWith('listing:') ? 'Valgte bolig' : 'Klik';
 const offset = (s: Session, t: number) => {
   const sec = Math.max(0, Math.round((t - s.startedAt) / 1000));
   return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
@@ -777,11 +827,28 @@ function renderSession(pane: HTMLElement) {
       rows.push({ t: ev.t, html: `<div class="tl-event">💬 Spørgsmål vist: <em>${esc(p?.question ?? ev.detail.slice(7))}</em><time>${offset(s, ev.t)}</time></div>` });
     } else if (ev.detail?.startsWith('skip:')) {
       rows.push({ t: ev.t, html: `<div class="tl-event">↷ Sprang spørgsmålet over<time>${offset(s, ev.t)}</time></div>` });
+    } else if (ev.type === 'action' && ev.action) {
+      rows.push({
+        t: ev.t,
+        html: `<div class="tl-click"><span class="click-icon">⌁</span><div class="click-content"><strong>${esc(clickActionLabel(ev))}</strong><span>${esc(clickLabel(ev))}</span>${ev.target ? `<small>${esc(ev.target)}</small>` : ''}</div><time>${offset(s, ev.t)}</time></div>`,
+      });
+    } else if (ev.type === 'action' && ev.detail) {
+      rows.push({ t: ev.t, html: `<div class="tl-click"><span class="click-icon">⌁</span><div class="click-content"><strong>${esc(formatAction(ev.detail))}</strong><span>${esc(formatAction(ev.detail))}</span></div><time>${offset(s, ev.t)}</time></div>` });
     }
   }
   for (const e of s.entries) rows.push({ t: e.t + 0.5, html: entryCard(s, e, { showQuestion: true }) });
   rows.sort((a, b) => a.t - b.t);
   const n = (type: string) => s.entries.filter((e) => e.type === type).length;
+  const clicks = clickEvents(s);
+  const clickCounts = [...new Set(clicks.map(clickLabel))]
+    .map((label) => ({ label, count: clicks.filter((ev) => clickLabel(ev) === label).length }))
+    .sort((a, b) => b.count - a.count);
+  const screenCounts = [...new Set(clicks.map((ev) => ev.screen))]
+    .map((screen) => ({ screen, count: clicks.filter((ev) => ev.screen === screen).length }))
+    .sort((a, b) => b.count - a.count);
+  const maxActionCount = clickCounts[0]?.count ?? 1;
+  const maxScreenCount = screenCounts[0]?.count ?? 1;
+  const uniqueButtons = clickCounts.length;
   pane.innerHTML = `
     <div class="doc-pane">
       <header class="pane-head doc-head">
@@ -798,7 +865,41 @@ function renderSession(pane: HTMLElement) {
           <div><dt>Status</dt><dd>${s.finishedAt ? '✓ Afsluttet' : '◌ Ikke afsluttet'}</dd></div>
           <div><dt>Booket</dt><dd>${esc(s.booked ?? '—')}</dd></div>
           <div><dt>Svar · tanker</dt><dd>${n('answer')} · ${n('thought')}</dd></div>
+          <div><dt>Klik registreret</dt><dd>${clicks.length}</dd></div>
         </dl>
+        <h3 class="report-h">Klikanalyse <span class="count">${clicks.length}</span></h3>
+        ${
+          clicks.length
+            ? `<div class="click-dashboard">
+                <div class="click-kpis">
+                  <div class="click-kpi"><strong>${clicks.length}</strong><span>tryk i alt</span></div>
+                  <div class="click-kpi"><strong>${uniqueButtons}</strong><span>unikke knapper</span></div>
+                  <div class="click-kpi"><strong>${esc(clickCounts[0]?.label ?? '—')}</strong><span>mest brugte handling</span></div>
+                </div>
+                <div class="click-charts">
+                  <section class="click-chart">
+                    <h4>Handlinger</h4>
+                    <div class="bar-list">${clickCounts
+                      .slice(0, 8)
+                      .map(
+                        ({ label, count }) =>
+                          `<div class="bar-row"><span class="bar-label" title="${esc(label)}">${esc(label)}</span><span class="bar-track"><i style="width:${Math.max(8, (count / maxActionCount) * 100)}%"></i></span><strong>${count}</strong></div>`,
+                      )
+                      .join('')}</div>
+                  </section>
+                  <section class="click-chart">
+                    <h4>Hvor i flowet?</h4>
+                    <div class="bar-list">${screenCounts
+                      .map(
+                        ({ screen, count }) =>
+                          `<div class="bar-row"><span class="bar-label" title="${esc(screenName(screen))}">${esc(screenName(screen))}</span><span class="bar-track screen"><i style="width:${Math.max(8, (count / maxScreenCount) * 100)}%"></i></span><strong>${count}</strong></div>`,
+                      )
+                      .join('')}</div>
+                  </section>
+                </div>
+              </div>`
+            : '<p class="muted-s">Ingen knaptryk registreret endnu.</p>'
+        }
         <h3 class="report-h">Tidslinje</h3>
         <div class="timeline">${rows.map((r) => r.html).join('') || '<p class="muted-s">Ingen aktivitet endnu.</p>'}</div>
       </div>
@@ -894,14 +995,19 @@ async function resultsClick(b: HTMLButtonElement) {
 // CSV med semikolon og BOM, så den åbner korrekt i dansk Excel
 function exportCSV(list: Session[], name: string) {
   const cell = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-  const head = ['session', 'deltager', 'type', 'spørgsmål', 'skærm', 'tekst', 'kilde', 'tidspunkt', 'sekunder_fra_start'];
-  const rows = list.flatMap((s) =>
-    s.entries.map((e) =>
-      [s._id, s.participant, ENTRY_LABEL[e.type], e.question ?? '', screenName(e.screen), e.text, e.source === 'voice' ? 'diktat' : 'skrevet', new Date(e.t).toISOString(), Math.round((e.t - s.startedAt) / 1000)]
+  const head = ['session', 'deltager', 'type', 'spørgsmål', 'skærm', 'tekst', 'mål', 'handling', 'kilde', 'tidspunkt', 'sekunder_fra_start'];
+  const rows = list.flatMap((s) => [
+    ...s.entries.map((e) =>
+      [s._id, s.participant, ENTRY_LABEL[e.type], e.question ?? '', screenName(e.screen), e.text, '', '', e.source === 'voice' ? 'diktat' : 'skrevet', new Date(e.t).toISOString(), Math.round((e.t - s.startedAt) / 1000)]
         .map(cell)
         .join(';'),
     ),
-  );
+    ...clickEvents(s).map((ev) =>
+      [s._id, s.participant, 'Klik', '', screenName(ev.screen), clickLabel(ev), ev.target ?? '', ev.action ?? '', '', new Date(ev.t).toISOString(), Math.round((ev.t - s.startedAt) / 1000)]
+        .map(cell)
+        .join(';'),
+    ),
+  ]);
   const blob = new Blob(['﻿' + [head.join(';'), ...rows].join('\n')], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
