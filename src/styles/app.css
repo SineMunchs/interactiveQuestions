@@ -45,6 +45,11 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 20px 0; }
 .admin-link:hover { background: var(--ink); color: #fff; }
 
 #panel { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 14px; }
+.intro-modal { position: absolute; inset: 0; z-index: 10; display: grid; place-items: center; padding: 18px; background: rgba(34,34,34,.32); border-radius: 16px; }
+.intro-modal-card { width: min(100%, 480px); padding: 22px; background: #fff; border: 1.5px solid var(--ink); border-radius: 16px; box-shadow: 6px 6px 0 var(--ink); animation: fade .25s ease; }
+.intro-modal-card h2 { font-size: 22px; margin-bottom: 10px; }
+.intro-modal-card p { font-size: 15px; line-height: 1.5; }
+.intro-modal-card p + p { margin-top: 10px; }
 .mode { display: grid; grid-template-columns: 1fr 1fr; background: #fff; border: 1.5px solid var(--ink); border-radius: 999px; padding: 3px; }
 .mode button { border-radius: 999px; padding: 7px 10px; font-size: 13px; font-weight: 600; }
 .mode button.on { background: var(--ink); color: #fff; }

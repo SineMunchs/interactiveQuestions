@@ -1051,6 +1051,15 @@ function renderPanel(done = false) {
 
   if (!session) {
     panelEl.innerHTML = `
+      <div class="intro-modal" role="dialog" aria-modal="true" aria-labelledby="intro-modal-title">
+        <div class="intro-modal-card">
+          <p class="eyebrow">Før du starter · ca. 10–15 min.</p>
+          <h2 id="intro-modal-title">Hvad er en think-aloud-test?</h2>
+          <p>Du bruger appen, som du normalt ville gøre, og fortæller løbende, hvad du ser, tænker og forventer. Det er appen, vi tester – ikke dig.</p>
+          <p><strong>Husk især:</strong> Skriv eller indtal dine tanker undervejs, og svar på spørgsmålene ved siden af telefonen, når de dukker op.</p>
+          <button class="primary full mt" data-intro-close>Jeg er klar – vis mig testen</button>
+        </div>
+      </div>
       <div class="panel-card intro-card">
         <div>
           <p class="eyebrow">Think-aloud-test · ca. 10–15 min.</p>
@@ -1203,6 +1212,8 @@ panelEl?.addEventListener('click', (e) => {
       return;
     }
     startSession(name);
+  } else if ('introClose' in d) {
+    b.closest('.intro-modal')?.remove();
   } else if ('answer' in d || 'skip' in d) {
     const q = pending.shift()!;
     if ('answer' in d) addEntry('answer', drafts.answer, voiceUsed.answer ? 'voice' : 'text', { ...q, question: promptQuestion(q) });
