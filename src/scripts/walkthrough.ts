@@ -1055,20 +1055,25 @@ function renderPanel(done = false) {
       <div class="panel-card intro-card">
         <div>
           <p class="eyebrow">Think-aloud-test · ca. 10–15 min.</p>
+          <p class="eyebrow">Klar til at gå i gang?</p>
           <h2>Velkommen 👋</h2>
-          <p class="intro-what"><strong>Hvad er en think-aloud-test?</strong> Du bruger appen og fortæller løbende, hvad du tænker – hvad du kigger efter, forventer og undrer dig over. Det er appen, vi tester – ikke dig.</p>
-          <p class="steps-h">Sådan gør du</p>
+          <div class="intro-what">
+            <strong>Hvad skal du gøre?</strong>
+            <p>Brug appen, som du ville gøre normalt, og fortæl os løbende, hvad du ser, tænker og undrer dig over.</p>
+            <small>Vi tester appen – ikke dig. Der findes ingen forkerte svar.</small>
+          </div>
+          <p class="steps-h">Din test i 5 trin</p>
           <ol class="howto">
-            <li>Skriv det <strong>deltager-ID, du har fået af os</strong>, og tryk <em>Start testen</em>.</li>
-            <li>Løs opgaven i telefonen, som du ville gøre i virkeligheden.</li>
-            <li><strong>Husk at skrive undervejs:</strong> Brug feltet <em>Husk at skrive undervejs</em> efter hver vigtig ting, du ser eller tænker – eller brug mikrofonen.</li>
-            <li>Når et spørgsmål dukker op, skal du først se på telefonen og derefter skrive dit svar i panelet.</li>
-            <li>Tryk <em>Jeg er færdig</em>, når du har booket eller vil stoppe.</li>
+            <li><span class="step-no">1</span><div><strong>Start testen</strong><small>Skriv dine egne initialer, fx <strong>AB</strong>, og tryk <em>Start testen</em>.</small></div></li>
+            <li><span class="step-no">2</span><div><strong>Brug telefonen</strong><small>Løs opgaven, som du ville gøre i virkeligheden.</small></div></li>
+            <li><span class="step-no">3</span><div><strong>Skriv eller indtal</strong><small>Notér dine tanker undervejs, eller tryk <em>Sig det højt</em>.</small></div></li>
+            <li><span class="step-no">4</span><div><strong>Svar på spørgsmål</strong><small>Se på telefonen først, og skriv derefter dit svar i panelet.</small></div></li>
+            <li><span class="step-no">5</span><div><strong>Afslut testen</strong><small>Tryk <em>Jeg er færdig</em>, når du er klar.</small></div></li>
           </ol>
         </div>
         <div class="intro-start">
           <div class="task"><strong>Din opgave</strong><p>${esc(settings.testTask)}</p></div>
-          <label class="field-l" for="participant">Dine initialer (2–4 bogstaver)</label>
+          <label class="field-l" for="participant">Dine egne initialer (2–4 bogstaver)</label>
           <input id="participant" class="text-in" placeholder="Fx AB" autocomplete="off" maxlength="4" pattern="[A-Za-zÆØÅæøå]{2,4}" value="${esc(participantDraft)}">
           <button class="primary full mt" data-start>Start testen</button>
         </div>
