@@ -1270,7 +1270,9 @@ async function init() {
     state.screen = params.get('screen')!;
   }
   if (params.get('category')) state.category = params.get('category')!;
-  if (mode === 'test') resumeSession();
+  // Testlinks starter altid på velkomsten. En afbrudt session kan stadig
+  // genoptages eksplicit via ?resume=1.
+  if (mode === 'test' && params.get('resume') === '1') resumeSession();
   render();
   renderPanel();
 }
