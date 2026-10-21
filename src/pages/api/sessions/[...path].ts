@@ -5,6 +5,7 @@ import { getSessions, saveSessions, type Session } from '../../../lib/content';
 // GET    /api/sessions/:id    → én session
 // PUT    /api/sessions/:id    → gem session (deltagersiden gemmer løbende)
 // DELETE /api/sessions/:id    → slet session
+// DELETE /api/sessions        → slet alle sessioner (Studio)
 
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json' } });
@@ -42,6 +43,6 @@ export const PUT: APIRoute = async ({ params, request }) => {
 export const DELETE: APIRoute = async ({ params }) =>
   serial(async () => {
     const sessions = await getSessions();
-    await saveSessions(sessions.filter((s) => s._id !== params.path));
+    await saveSessions(params.path ? sessions.filter((s) => s._id !== params.path) : []);
     return json({ ok: true });
   });

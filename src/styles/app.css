@@ -380,6 +380,7 @@ h3 svg { width: 16px; height: 16px; }
 .link-btn { text-decoration: underline; font-size: 13px; color: var(--muted); align-self: center; }
 .center-card { text-align: center; }
 .big-emoji { font-size: 40px; margin-bottom: 6px; }
+.final-intro { margin: -2px 0 14px; padding: 10px 12px; border-radius: 10px; background: #f7f8fa; color: var(--muted); font-size: 14px !important; line-height: 1.45 !important; }
 .prompt-reminder { position: fixed; z-index: 20; top: 22px; left: 50%; translate: -50% 0; width: min(420px, calc(100% - 32px)); padding: 16px 18px; background: #fff; border: 2px solid var(--hot); border-radius: 14px; box-shadow: 6px 6px 0 var(--hot), 0 12px 30px rgba(0,0,0,.18); animation: reminder-in .25s ease; }
 .prompt-reminder strong { display: block; font-size: 15px; color: var(--hot); }
 .prompt-reminder p { margin-top: 4px; font-size: 13px; line-height: 1.4; }

@@ -1088,6 +1088,7 @@ function renderPanel(done = false) {
     panelEl.innerHTML = `
       <div class="panel-card">
         <p class="eyebrow">Afsluttende spørgsmål ${finalIndex + 1} af ${finalQuestions.length}</p>
+        ${finalIndex === 0 ? '<p class="final-intro">Til sidst vil vi gerne høre lidt mere om din oplevelse. Svar kort og ærligt på hvert spørgsmål – der er ikke noget rigtigt eller forkert svar.</p>' : ''}
         <h2>${esc(finalQuestion)}</h2>
         <textarea id="ta-final" class="ta" rows="5" placeholder="Skriv dit svar …">${esc(drafts.final)}</textarea>
         <div class="row-btns">${micBtn('final')}<span class="grow"></span></div>
@@ -1223,7 +1224,7 @@ panelEl?.addEventListener('click', (e) => {
   } else if ('unfinish' in d) {
     finishing = false;
     renderPanel();
-  } else if ('final-next' in d) {
+  } else if ('finalNext' in d) {
     const questions = settings.finalQuestions?.length ? settings.finalQuestions : [settings.finalQuestion];
     addEntry('final', drafts.final, voiceUsed.final ? 'voice' : 'text', { _id: `final-${finalIndex}`, question: questions[finalIndex] });
     finalIndex += 1;

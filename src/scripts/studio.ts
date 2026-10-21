@@ -622,6 +622,16 @@ $('#pane-list').addEventListener('click', async (e) => {
   if (!b) return;
   e.preventDefault();
   if (b.hasAttribute('data-export-all')) return exportCSV(sessions, 'think-aloud-alle-sessioner');
+  if (b.hasAttribute('data-reset-sessions')) {
+    if (!confirm('Slet alle testsessioner, svar og noter? Spørgsmål og indhold bevares. Det kan ikke fortrydes.')) return;
+    const response = await fetch('/api/sessions', { method: 'DELETE' });
+    if (!response.ok) throw new Error('Kunne ikke nulstille testsessionerne');
+    await reload();
+    location.hash = 'sessions';
+    render();
+    toast('Alle testsessioner er slettet');
+    return;
+  }
   if (b.hasAttribute('data-refresh')) {
     await reload();
     return render();
@@ -754,6 +764,7 @@ function renderResultsList() {
         <span class="grow"></span>
         <button class="icon-btn" data-refresh title="Hent nye svar">↻</button>
         <button class="icon-btn" data-export-all title="Eksportér alle svar som CSV" ${sessions.length ? '' : 'disabled'}>⤓</button>
+        <button class="danger" data-reset-sessions ${sessions.length ? '' : 'disabled'}>Nulstil svar</button>
       </header>
       <nav class="pane-list docs">
         ${
