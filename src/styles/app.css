@@ -332,7 +332,7 @@ h3 svg { width: 16px; height: 16px; }
 .task.mini p { font-size: 13px !important; line-height: 1.45; }
 .howto { margin: 0 0 16px; padding: 0; list-style: none; font-size: 14px; line-height: 1.4; display: flex; flex-direction: column; gap: 8px; }
 .howto li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; background: #fff; border: 1px solid var(--line); border-radius: 10px; }
-.howto li strong, .howto li small { display: block; }
+.howto li > div > strong, .howto li > div > small { display: block; }
 .howto li small { margin-top: 2px; color: var(--muted); }
 .step-no { display: grid; place-items: center; flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 12px; font-weight: 700; }
 .wt-side.intro { width: 680px; }
@@ -359,7 +359,7 @@ h3 svg { width: 16px; height: 16px; }
 .session-head { display: flex; align-items: center; gap: 10px; }
 .session-head strong { font-size: 14px; }
 .rec-dot { width: 10px; height: 10px; border-radius: 50%; background: #3ab667; box-shadow: 0 0 0 3px rgba(58,182,103,.2); }
-.q-card { position: absolute; top: 0; left: 0; right: 0; max-height: calc(50% - 7px); overflow: hidden; z-index: 3; margin: 0; border-color: var(--hot); box-shadow: 4px 4px 0 var(--hot), 0 8px 14px rgba(0,0,0,.08); }
+.q-card { position: absolute; top: 0; left: 0; right: 0; height: max-content; overflow: visible; z-index: 3; margin: 0; border-color: var(--hot); box-shadow: 4px 4px 0 var(--hot), 0 8px 14px rgba(0,0,0,.08); }
 .q-card.pop { animation: pop .35s ease; }
 @keyframes pop { 0% { transform: scale(.96); opacity: .5; } 60% { transform: scale(1.02); } }
 .q-card h2 { font-size: 18px; }
@@ -370,7 +370,7 @@ h3 svg { width: 16px; height: 16px; }
 .question-help span strong { color: var(--ink); }
 .thought-card h2 { font-size: 16px; margin: 0; }
 .thought-help { font-size: 13px !important; line-height: 1.45; color: var(--muted, #666); margin: 4px 0 8px; }
-.thought-card { position: absolute; bottom: 0; left: 0; right: 0; max-height: calc(50% - 7px); overflow: hidden; z-index: 3; margin: 0; box-shadow: 0 -4px 16px rgba(0,0,0,.08); border-color: #8d9bb2; }
+.thought-card { position: absolute; bottom: 0; left: 0; right: 0; height: max-content; overflow: visible; z-index: 3; margin: 0; box-shadow: 0 -4px 16px rgba(0,0,0,.08); border-color: #8d9bb2; }
 .where { margin-top: 8px; }
 .where span { color: var(--ink); font-weight: 600; }
 .log { background: rgba(255,255,255,.6); border-radius: 12px; padding: 10px 12px; }

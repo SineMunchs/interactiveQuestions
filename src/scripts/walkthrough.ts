@@ -1042,7 +1042,6 @@ function renderPanel(done = false) {
   if (done) {
     panelEl.innerHTML = `
       <div class="panel-card center-card">
-        <p class="big-emoji">🙏</p>
         <h2>Tak for din deltagelse!</h2>
         <p>Dine tanker og svar er gemt. Du kan lukke vinduet nu.</p>
         <button class="ghost mt" data-new>Start en ny session</button>
